@@ -68,7 +68,7 @@ function Portfolio() {
               gentle emotional records and anonymous whispers.
             </p>
             <div className="flex flex-wrap gap-2 pt-2">
-              {["Mobile · iOS", "8 Screens", "Editorial UI", "Nature System"].map(t => (
+              {["Mobile · iOS", "9 Screens", "Editorial UI", "Nature System"].map(t => (
                 <span key={t} className="px-3 py-1.5 rounded-full text-[9.5px] tracking-[0.25em] uppercase"
                   style={{ background: "color-mix(in oklab, white 60%, transparent)", color: "var(--forest)", border: "1px solid color-mix(in oklab, var(--border) 80%, transparent)" }}>{t}</span>
               ))}
@@ -168,7 +168,7 @@ function Portfolio() {
                 <div className="grid grid-cols-2 gap-x-10 gap-y-8 mt-12">
                   {[
                     ["18–35", "目标用户", "Target Users"],
-                    ["8", "核心界面", "Screens"],
+                    ["9", "核心界面", "Screens"],
                     ["6", "色彩语言", "Palette"],
                     ["4", "成长阶段", "Plant Stages"],
                   ].map(([n, cn, en]) => (
