@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Splash, HomeScreen, MoodScreen, ActivitiesScreen, BookingScreen,
-  PlantScreen, CommunityScreen, ProfileScreen,
+  PlantScreen, CommunityScreen, ProfileScreen, SoundScreen,
 } from "@/components/healing/Screens";
 import { Leaf } from "@/components/healing/icons";
 
