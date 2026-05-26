@@ -88,7 +88,7 @@ function Portfolio() {
           </div>
         </div>
 
-        <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-24 justify-items-center">
+        <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-24 justify-items-center">
           <Splash />
           <HomeScreen />
           <MoodScreen />
@@ -97,6 +97,7 @@ function Portfolio() {
           <PlantScreen />
           <CommunityScreen />
           <ProfileScreen />
+          <SoundScreen />
         </div>
       </section>
 
