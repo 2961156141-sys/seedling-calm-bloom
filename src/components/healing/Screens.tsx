@@ -699,3 +699,117 @@ export function ProfileScreen() {
     </ScreenShell>
   );
 }
+
+/* ──────────────────────────────────────────────────────────────
+   9. Sound Healing Player · 声音疗愈
+   ────────────────────────────────────────────────────────────── */
+export function SoundScreen() {
+  const tracks = [
+    { cn: "雨落松林", en: "Rain on Pines", len: "24:10" },
+    { cn: "清晨溪流", en: "Morning Stream", len: "18:42" },
+    { cn: "风穿麦田", en: "Wind in Wheat", len: "31:05" },
+  ];
+  return (
+    <ScreenShell label="声音疗愈" en="Sound Healing">
+      <div className="absolute inset-0" style={{
+        background: "linear-gradient(180deg, oklch(0.42 0.05 155) 0%, oklch(0.32 0.05 160) 60%, oklch(0.24 0.04 165) 100%)",
+      }} />
+      <div className="absolute inset-0 opacity-40" style={{
+        background: "radial-gradient(circle at 50% 28%, var(--gold), transparent 45%)",
+      }} />
+      <svg className="absolute -bottom-6 -left-8 opacity-15" width="260" height="260" viewBox="0 0 240 240" fill="none" stroke="var(--cream)" strokeWidth="0.6">
+        <path d="M30 220c50-50 110-100 190-160" />
+        <path d="M60 220c40-60 100-110 170-150" />
+        <path d="M10 200c70-30 130-90 200-160" />
+      </svg>
+
+      <StatusBar tint="color-mix(in oklab, var(--cream) 85%, transparent)" />
+
+      <div className="relative px-5 pt-2 h-full flex flex-col" style={{ color: "var(--cream)" }}>
+        <div className="flex items-center justify-between">
+          <ChevronLeft className="w-5 h-5" />
+          <div className="text-[10px] tracking-[0.35em] uppercase opacity-75">Now Playing</div>
+          <Settings className="w-4 h-4 opacity-75" />
+        </div>
+
+        {/* Breathing circle visualizer */}
+        <div className="mt-8 flex flex-col items-center">
+          <div className="relative w-[180px] h-[180px] flex items-center justify-center">
+            {[1, 0.78, 0.58, 0.38].map((s, i) => (
+              <div key={i} className="absolute rounded-full" style={{
+                width: `${180 * s}px`, height: `${180 * s}px`,
+                border: "1px solid color-mix(in oklab, var(--cream) 25%, transparent)",
+                background: i === 3 ? "color-mix(in oklab, var(--gold) 25%, transparent)" : "transparent",
+                boxShadow: i === 3 ? "0 0 40px oklch(0.76 0.085 75 / 0.4)" : "none",
+              }} />
+            ))}
+            <Leaf className="w-7 h-7 relative" style={{ color: "var(--gold)" }} />
+          </div>
+
+          <div className="mt-7 text-center">
+            <div className="text-[10px] tracking-[0.35em] uppercase opacity-70">Forest Series · 森系</div>
+            <div className="font-display text-[26px] mt-2">雨落松林</div>
+            <div className="text-[10.5px] mt-1 opacity-75" style={{ fontStyle: "italic" }}>Rain on Pines</div>
+          </div>
+
+          {/* Waveform progress */}
+          <div className="mt-6 w-full px-2">
+            <div className="flex items-end justify-between gap-[2px] h-7">
+              {Array.from({ length: 42 }).map((_, i) => {
+                const played = i < 18;
+                const h = 6 + Math.abs(Math.sin(i * 0.7)) * 18 + (i % 4) * 2;
+                return (
+                  <div key={i} className="flex-1 rounded-full" style={{
+                    height: `${h}px`,
+                    background: played ? "var(--gold)" : "color-mix(in oklab, var(--cream) 22%, transparent)",
+                  }} />
+                );
+              })}
+            </div>
+            <div className="flex justify-between mt-2 text-[9.5px] opacity-70 tracking-widest">
+              <span>10:24</span><span>24:10</span>
+            </div>
+          </div>
+
+          {/* Controls */}
+          <div className="mt-5 flex items-center justify-center gap-7">
+            <div className="text-[10px] tracking-[0.25em] opacity-70">−10s</div>
+            <div className="w-7 h-7 rounded-full border flex items-center justify-center"
+              style={{ borderColor: "color-mix(in oklab, var(--cream) 40%, transparent)" }}>
+              <div className="w-2 h-2 border-l-2 border-cream" style={{ borderColor: "var(--cream)" }} />
+            </div>
+            <div className="w-14 h-14 rounded-full flex items-center justify-center"
+              style={{ background: "var(--gold)" }}>
+              <div className="flex gap-[3px]">
+                <div className="w-[3px] h-4 rounded-sm" style={{ background: "var(--forest)" }} />
+                <div className="w-[3px] h-4 rounded-sm" style={{ background: "var(--forest)" }} />
+              </div>
+            </div>
+            <div className="w-7 h-7 rounded-full border flex items-center justify-center"
+              style={{ borderColor: "color-mix(in oklab, var(--cream) 40%, transparent)" }}>
+              <div className="w-2 h-2 border-r-2" style={{ borderColor: "var(--cream)" }} />
+            </div>
+            <div className="text-[10px] tracking-[0.25em] opacity-70">+10s</div>
+          </div>
+        </div>
+
+        {/* Up next */}
+        <div className="mt-auto pb-24">
+          <div className="text-[9.5px] tracking-[0.3em] uppercase opacity-65 mb-2">Up Next · 接下来</div>
+          <div className="space-y-1.5">
+            {tracks.slice(1).map(t => (
+              <div key={t.en} className="flex items-center justify-between rounded-xl px-3 py-2"
+                style={{ background: "color-mix(in oklab, var(--cream) 8%, transparent)", border: "1px solid color-mix(in oklab, var(--cream) 12%, transparent)" }}>
+                <div>
+                  <div className="text-[12px]" style={{ fontFamily: "var(--font-display)" }}>{t.cn}</div>
+                  <div className="text-[9px] opacity-70 tracking-widest">{t.en}</div>
+                </div>
+                <div className="text-[9.5px] opacity-70">{t.len}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </ScreenShell>
+  );
+}
