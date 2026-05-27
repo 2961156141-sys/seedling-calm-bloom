@@ -4,6 +4,8 @@ import {
   PlantScreen, CommunityScreen, ProfileScreen, SoundScreen,
 } from "@/components/healing/Screens";
 import { Leaf } from "@/components/healing/icons";
+import type { ReactNode } from "react";
+
 
 export const Route = createFileRoute("/")({
   component: Portfolio,
