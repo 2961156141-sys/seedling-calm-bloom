@@ -103,7 +103,11 @@ function Portfolio() {
         </div>
       </section>
 
+      {/* ───── Visual Map ───── */}
+      <VisualMap />
+
       {/* ───── Color + Concept ───── */}
+
       <section className="max-w-[1320px] mx-auto px-8 md:px-16 mt-36">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.15fr] gap-16 lg:gap-24 items-start">
           {/* Color system */}
