@@ -40,45 +40,49 @@ function SectionLabel({ n, en, cn }: { n: string; en: string; cn?: string }) {
 /* ─────────────── Visual Map ─────────────── */
 
 type Node = {
-  x: number; y: number;          // % within board
+  col: number; row: number;
   n: string; cn: string; en: string;
-  ry: number;                    // rotateY deg
-  scale: number;
-  z: number;
   screen: ReactNode;
 };
 
-function MapPhone({ node }: { node: Node }) {
-  const { x, y, ry, scale, z, n, cn, en, screen } = node;
+function MapPhone({ node, cellW, cellH }: { node: Node; cellW: number; cellH: number }) {
+  const { col, row, n, cn, en, screen } = node;
+  // isometric staggered placement — like phones tilted on a table
+  const x = col * cellW + row * cellW * 0.18;
+  const y = row * cellH - col * cellH * 0.04;
+
   return (
     <div
       className="absolute"
       style={{
-        left: `${x}%`,
-        top: `${y}%`,
-        width: 200,
-        height: 360,
-        transform: "translate(-50%, -50%)",
-        zIndex: z,
+        left: x,
+        top: y,
+        width: 240,
+        height: 480,
+        zIndex: row * 3 + col,
       }}
     >
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div
-          style={{
-            transform: `perspective(1800px) rotateX(14deg) rotateY(${ry}deg) rotateZ(${ry > 0 ? -2 : 2}deg) scale(${scale})`,
-            transformStyle: "preserve-3d",
-            filter: "drop-shadow(0 40px 38px oklch(0.36 0.06 155 / 0.22))",
-          }}
-        >
-          {screen}
-        </div>
+      <div
+        style={{
+          transform:
+            "perspective(2600px) rotateX(42deg) rotateZ(-34deg) scale(0.74)",
+          transformOrigin: "center center",
+          transformStyle: "preserve-3d",
+          filter:
+            "drop-shadow(0 34px 28px oklch(0.36 0.06 155 / 0.18)) drop-shadow(0 6px 8px oklch(0.36 0.06 155 / 0.10))",
+        }}
+      >
+        {screen}
       </div>
-      <div className="absolute left-1/2 -translate-x-1/2 -bottom-2 text-center whitespace-nowrap">
+      <div
+        className="absolute left-1/2 text-center whitespace-nowrap"
+        style={{ bottom: -10, transform: "translateX(-50%)" }}
+      >
         <div className="font-display text-[11px] tracking-[0.35em]" style={{ color: "var(--gold)" }}>
           {n}
         </div>
-        <div className="text-[11px] mt-1" style={{ color: "var(--forest)" }}>{cn}</div>
-        <div className="text-[8.5px] tracking-[0.28em] uppercase mt-1" style={{ color: "var(--herb)" }}>
+        <div className="text-[10.5px] mt-1" style={{ color: "var(--forest)" }}>{cn}</div>
+        <div className="text-[8.5px] tracking-[0.28em] uppercase mt-0.5" style={{ color: "var(--herb)" }}>
           {en}
         </div>
       </div>
@@ -88,21 +92,21 @@ function MapPhone({ node }: { node: Node }) {
 
 function VisualMap() {
   const nodes: Node[] = [
-    { x:  6, y: 58, n: "01", cn: "启幕",       en: "Splash",     ry: -22, scale: 0.42, z: 2, screen: <Splash /> },
-    { x: 17, y: 28, n: "02", cn: "首页",       en: "Home",       ry: -22, scale: 0.44, z: 3, screen: <HomeScreen /> },
-    { x: 28, y: 62, n: "03", cn: "情绪打卡",   en: "Mood",       ry: -22, scale: 0.44, z: 3, screen: <MoodScreen /> },
-    { x: 39, y: 30, n: "04", cn: "活动",       en: "Activities", ry: -20, scale: 0.46, z: 4, screen: <ActivitiesScreen /> },
-    { x: 50, y: 60, n: "05", cn: "植物养成",   en: "Plant",      ry:   0, scale: 0.58, z: 9, screen: <PlantScreen /> },
-    { x: 61, y: 30, n: "06", cn: "预订",       en: "Booking",    ry:  20, scale: 0.46, z: 4, screen: <BookingScreen /> },
-    { x: 72, y: 62, n: "07", cn: "社区",       en: "Community",  ry:  22, scale: 0.44, z: 3, screen: <CommunityScreen /> },
-    { x: 83, y: 30, n: "08", cn: "我的",       en: "Profile",    ry:  22, scale: 0.44, z: 3, screen: <ProfileScreen /> },
-    { x: 94, y: 60, n: "09", cn: "声音疗愈",   en: "Sound",      ry:  22, scale: 0.42, z: 2, screen: <SoundScreen /> },
+    { col: 0, row: 0, n: "01", cn: "启幕",     en: "Splash",     screen: <Splash /> },
+    { col: 1, row: 0, n: "02", cn: "首页",     en: "Home",       screen: <HomeScreen /> },
+    { col: 2, row: 0, n: "03", cn: "情绪打卡", en: "Mood",       screen: <MoodScreen /> },
+    { col: 0, row: 1, n: "04", cn: "活动",     en: "Activities", screen: <ActivitiesScreen /> },
+    { col: 1, row: 1, n: "05", cn: "植物养成", en: "Plant",      screen: <PlantScreen /> },
+    { col: 2, row: 1, n: "06", cn: "预订",     en: "Booking",    screen: <BookingScreen /> },
+    { col: 0, row: 2, n: "07", cn: "社区",     en: "Community",  screen: <CommunityScreen /> },
+    { col: 1, row: 2, n: "08", cn: "我的",     en: "Profile",    screen: <ProfileScreen /> },
+    { col: 2, row: 2, n: "09", cn: "声音疗愈", en: "Sound",      screen: <SoundScreen /> },
   ];
 
-  // dashed connector path between centers
-  const pathD = nodes
-    .map((nd, i) => `${i === 0 ? "M" : "L"} ${nd.x} ${nd.y}`)
-    .join(" ");
+  const cellW = 230;
+  const cellH = 360;
+  const boardW = cellW * 2 + cellH * 0.18 * 2 + 240;
+  const boardH = cellH * 2 + 480 - cellH * 0.04 * 2;
 
   return (
     <section className="max-w-[1480px] mx-auto px-6 md:px-12 mt-36">
@@ -120,54 +124,35 @@ function VisualMap() {
       <div
         className="relative mt-14 rounded-[36px] overflow-hidden"
         style={{
-          aspectRatio: "16 / 9",
+          aspectRatio: "16 / 11",
           background:
             "radial-gradient(ellipse 70% 60% at 50% 45%, oklch(0.985 0.006 100), white 70%)",
           border: "1px solid color-mix(in oklab, var(--border) 60%, transparent)",
           boxShadow: "0 30px 60px -40px oklch(0.36 0.06 155 / 0.18)",
         }}
       >
-        {/* dashed flow path */}
-        <svg
-          className="absolute inset-0 w-full h-full pointer-events-none"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
-        >
-          <path
-            d={pathD}
-            fill="none"
-            stroke="oklch(0.62 0.06 145 / 0.55)"
-            strokeWidth="0.18"
-            strokeDasharray="0.7 0.7"
-            strokeLinecap="round"
-            vectorEffect="non-scaling-stroke"
-            style={{ strokeWidth: 1.2 } as React.CSSProperties}
-          />
-          {nodes.map((nd) => (
-            <circle
-              key={nd.n}
-              cx={nd.x}
-              cy={nd.y}
-              r="0.35"
-              fill="var(--gold)"
-              vectorEffect="non-scaling-stroke"
-            />
-          ))}
-        </svg>
-
-        {/* corner caption */}
-        <div className="absolute top-6 left-7 flex items-center gap-2 text-[10px] tracking-[0.35em] uppercase" style={{ color: "var(--herb)" }}>
+        <div className="absolute top-6 left-7 flex items-center gap-2 text-[10px] tracking-[0.35em] uppercase z-50" style={{ color: "var(--herb)" }}>
           <span className="inline-block w-2.5 h-2.5" style={{ background: "var(--herb)" }} />
           Visual Map
         </div>
-        <div className="absolute bottom-6 right-7 text-[9.5px] tracking-[0.3em] uppercase" style={{ color: "oklch(0.55 0.025 150)" }}>
+        <div className="absolute bottom-6 right-7 text-[9.5px] tracking-[0.3em] uppercase z-50" style={{ color: "oklch(0.55 0.025 150)" }}>
           愈见 · User Flow · 2026
         </div>
 
-        {/* phones */}
-        {nodes.map((nd) => (
-          <MapPhone key={nd.n} node={nd} />
-        ))}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div
+            className="relative"
+            style={{
+              width: boardW,
+              height: boardH,
+              transform: "scale(min(1, 1))",
+            }}
+          >
+            {nodes.map((nd) => (
+              <MapPhone key={nd.n} node={nd} cellW={cellW} cellH={cellH} />
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
